@@ -1,0 +1,328 @@
+<title>Palmieri Village Bid Estimate</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#f2f3f1; --surface:#ffffff; --ink:#161a1a; --muted:#5b6563; --line:#d6dad7; --line-strong:#b9c0bd;
+  --accent:#1f4e79; --accent-ink:#ffffff; --panel:#e8ebe9;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --neutral:#9aa39f; --band:#d5e4f6;
+  --good:#1a7f4b; --warn:#b26a00;
+  --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif; --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#161918; --surface:#1f2322; --ink:#ecefee; --muted:#a4adaa; --line:#333936; --line-strong:#4a524f;
+  --accent:#6aa7dc; --accent-ink:#0f1a24; --panel:#262b2a; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --neutral:#6e7773; --band:#223247; --good:#4fc083; --warn:#e0a53b; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --ground:#161918; --surface:#1f2322; --ink:#ecefee; --muted:#a4adaa; --line:#333936; --line-strong:#4a524f;
+  --accent:#6aa7dc; --accent-ink:#0f1a24; --panel:#262b2a; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --neutral:#6e7773; --band:#223247; --good:#4fc083; --warn:#e0a53b; color-scheme:dark;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 24px 64px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:.01em}
+h2{font-size:26px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin:0 0 12px}
+h3{font-size:19px;font-weight:600;margin:0 0 6px}
+.eyebrow{font-family:var(--display);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+p{max-width:68ch}
+.title-block{display:grid;grid-template-columns:2fr repeat(4,1fr);border:1.5px solid var(--ink);background:var(--surface)}
+.title-block>div{padding:12px 14px;border-right:1px solid var(--line-strong)}
+.title-block>div:last-child{border-right:0}
+.title-block .name{font-family:var(--display);font-size:38px;font-weight:700;line-height:1;text-transform:uppercase}
+.title-block .sub{color:var(--muted);margin-top:6px;font-size:14px}
+.title-block .v{font-family:var(--mono);font-size:15px;margin-top:4px}
+.headline{margin-top:28px;display:grid;grid-template-columns:1.5fr 1fr;gap:28px;align-items:end}
+.big{font-family:var(--display);font-size:72px;font-weight:700;line-height:.95;letter-spacing:-.01em}
+.big small{font-size:28px;font-weight:600;color:var(--muted);margin:0 10px}
+.rangebar{margin-top:14px}
+.rangebar svg{width:100%;height:64px;display:block;overflow:visible}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.kpis>div{background:var(--surface);padding:12px 14px}
+.kpis .k{color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;font-family:var(--display);font-weight:600}
+.kpis .v{font-family:var(--mono);font-size:20px;margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px}
+@media (max-width:860px){.grid2,.headline{grid-template-columns:1fr}.title-block{grid-template-columns:1fr 1fr}.big{font-size:56px}}
+.panel{background:var(--panel);padding:18px 20px;border-top:3px solid var(--accent)}
+.slider{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.slider:last-of-type{border-bottom:0}
+.slider label{font-size:14px}
+.slider .val{font-family:var(--mono);font-size:14px;text-align:right;min-width:9ch}
+.slider input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent);margin:0}
+.slider .rng{grid-column:1/-1;display:flex;justify-content:space-between;color:var(--muted);font-size:11.5px;font-family:var(--mono)}
+.toggles{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-strong)}
+.toggles label{display:flex;gap:8px;align-items:center;font-size:14px}
+.toggles input{accent-color:var(--accent);width:16px;height:16px}
+button.reset{margin-top:14px;font:inherit;font-size:13px;padding:6px 12px;background:transparent;color:var(--accent);border:1px solid var(--accent);cursor:pointer}
+button.reset:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chart svg{width:100%;display:block;overflow:visible}
+.chart text{font-family:var(--body);font-size:12.5px;fill:var(--ink)}
+.chart .muted{fill:var(--muted)}
+.chart .mono{font-family:var(--mono)}
+.legend{display:flex;gap:16px;color:var(--muted);font-size:13px;margin-top:6px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px;background:var(--sw)}
+section{margin-top:44px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
+th{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;text-align:left;color:var(--muted);padding:9px 10px;border-bottom:1.5px solid var(--line-strong);background:var(--surface);position:sticky;top:0}
+td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.r,th.r{text-align:right}
+tr.cat td{font-family:var(--display);font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding-top:14px;background:var(--ground)}
+tr.total td{font-weight:600;border-top:1.5px solid var(--ink);border-bottom:0}
+tr.off td{color:var(--muted);text-decoration:line-through}
+.fuel{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.rec{padding:14px 16px;background:var(--surface);border-left:4px solid var(--accent);margin-top:12px}
+ul.notes{padding-left:18px;color:var(--muted);font-size:13.5px;max-width:80ch}
+ul.notes li{margin:4px 0}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--ground);font-size:12.5px;padding:6px 9px;border-radius:2px;transform:translate(-50%,-125%);white-space:nowrap;z-index:5;font-family:var(--mono)}
+.tip[hidden]{display:none}
+.foot{margin-top:48px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:12px}
+.sim{display:inline-block;background:var(--warn);color:#fff;font-family:var(--display);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;margin-left:8px;vertical-align:middle}
+@media (prefers-reduced-motion:no-preference){.bar,.band-rect{transition:x .25s ease,width .25s ease}}
+</style>
+<div class="wrap">
+  <div class="title-block" id="titleblock"></div>
+
+  <div class="headline">
+    <div>
+      <div class="eyebrow">Planning range, P10 to P90</div>
+      <div class="big" id="headline"></div>
+      <div class="rangebar chart" id="rangebar"></div>
+      <p style="color:var(--muted);font-size:13.5px;margin:10px 0 0">Blue band is the P10 to P90 planning range from 3,000 Monte Carlo runs; grey is the every-line-at-low to every-line-at-high envelope. The median sits above the every-line-at-most-likely figure because construction risk skews up, not down.</p>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <div class="eyebrow">Move the levers</div>
+      <h2 style="margin-top:4px">What if</h2>
+      <div id="sliders"></div>
+      <div class="toggles" id="toggles"></div>
+      <button class="reset" id="reset">Reset to estimate</button>
+    </div>
+    <div>
+      <div class="eyebrow">Mid estimate by category</div>
+      <h2 style="margin-top:4px">Where the money goes</h2>
+      <div class="chart" id="catchart"></div>
+      <div class="legend"><span style="--sw:var(--s1)">mid</span><span style="--sw:var(--neutral)">low to high bound</span></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="eyebrow">Sensitivity</div>
+    <h2>Where the money moves</h2>
+    <p>Each bar swings one line between its low and high price with everything else held at mid. Longer bar, bigger bidding risk. These are the lines worth another round of quotes before the number goes out.</p>
+    <div class="chart" id="tornado"></div>
+    <div class="legend"><span style="--sw:var(--s1)">total if the line comes in LOW</span><span style="--sw:var(--s2)">total if the line comes in HIGH</span></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Restaurant tenants</div>
+    <h2>Propane vs natural gas</h2>
+    <div class="fuel">
+      <div class="chart" id="fuelchart"></div>
+      <div id="fueltext"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Line items</div>
+    <h2>The bid sheet</h2>
+    <p>Unit prices here include the region, finish, and glazing factors applied to the cost-book price (the sliders above show cost-book prices). Low and high are unit-price bounds, not the planning range. Lines struck through are in the cost book but switched off for this scenario.</p>
+    <div class="tablewrap"><table id="items"></table></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Basis</div>
+    <h2>Assumptions and exclusions</h2>
+    <ul class="notes" id="assumptions"></ul>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+const D = {"project": {"name": "Palmieri Village", "client": "NYC real estate developer (confidential)", "location": {"city": "Atlanta", "state": "GA"}, "factory_state": "NC", "factory_to_site_miles": 400.0, "container_count": 38, "container_type": "40HC", "use_mix": {"retail": 30, "restaurant": 6, "restroom": 2}, "stacked_fraction": 0.0, "site_area_sqft": 22000.0, "courtyard_hardscape_sqft": 9800.0, "parking_spaces": 40, "glazing_level": "storefront", "finish_level": "standard", "fuel": "natural_gas", "include_kitchen_equipment": false, "schedule_months": 14, "notes": "22,000 sq ft U-shaped container village, fabricated in NC and assembled in Atlanta. Restaurant tenants need gas; propane vs natural gas is an open question."}, "takeoff": {"containers": 38.0, "ground_containers": 38.0, "upper_containers": 0.0, "crane_sets_weighted": 38.0, "building_sqft": 12160.0, "envelope_sqft": 46816.0, "interior_wall_sqft": 34656.0, "restaurant_containers": 6.0, "restroom_containers": 2.0, "retail_containers": 30.0, "mechanical_containers": 0.0, "container_miles": 15200.0, "site_area_sqft": 22000.0, "courtyard_hardscape_sqft": 9800.0, "parking_spaces": 40.0, "lump": 1.0, "lump_if_natural_gas": 1.0, "lump_if_propane": 0.0}, "items": [{"id": "container_purchase", "category": "Containers", "name": "Container purchase (one-trip high cube)", "quantity": 38.0, "unit": "ea", "unit_low": 2436.0, "unit_mid": 3654.0, "unit_high": 6090.0, "low": 92568.0, "mid": 138852.0, "high": 231420.0, "basis": "Per container. Volume negotiation is the single biggest lever.", "source": "Flextail Atlanta quotes ($2,800-$7,000), 2025 one-trip 40' HC market", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "container_freight_in", "category": "Containers", "name": "Container freight to factory", "quantity": 38.0, "unit": "ea", "unit_low": 348.0, "unit_mid": 652.5, "unit_high": 1044.0, "low": 13224.0, "mid": 24795.0, "high": 39672.0, "basis": "Often negotiable to $0 with volume purchase.", "source": "Depot-to-factory drayage, SE US", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "structural_mods", "category": "Factory build-out", "name": "Structural modifications (cut openings, steel reinforcement, welding)", "quantity": 38.0, "unit": "ea", "unit_low": 2610.0, "unit_mid": 4785.0, "unit_high": 7830.0, "low": 99180.0, "mid": 181830.0, "high": 297540.0, "basis": "Scales with glazing level: more openings = more steel.", "source": "Container-build case studies; shop labor at $55-75/hr", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "floor_prep", "category": "Factory build-out", "name": "Floor prep (marine ply removal/seal, subfloor)", "quantity": 38.0, "unit": "ea", "unit_low": 522.0, "unit_mid": 870.0, "unit_high": 1566.0, "low": 19836.0, "mid": 33060.0, "high": 59508.0, "basis": "", "source": "Shop estimate", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "insulation", "category": "Factory build-out", "name": "Closed-cell spray foam insulation", "quantity": 46816.0, "unit": "sqft envelope", "unit_low": 1.218, "unit_mid": 1.653, "unit_high": 2.262, "low": 57021.888, "mid": 77386.848, "high": 105897.792, "basis": "Envelope = walls + roof of each container.", "source": "Spray foam contractors, 2-3 in. closed cell", "optional": false, "percent_of": null, "active": true, "factor": 0.8700000000000001}, {"id": "interior_walls", "category": "Factory build-out", "name": "Interior framing and wall finish", "quantity": 34656.0, "unit": "sqft wall", "unit_low": 3.48, "unit_mid": 5.22, "unit_high": 7.83, "low": 120602.88, "mid": 180904.31999999998, "high": 271356.48, "basis": "", "source": "Light-gauge steel framing + drywall or panel", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "flooring", "category": "Factory build-out", "name": "Flooring", "quantity": 12160.0, "unit": "sqft", "unit_low": 3.48, "unit_mid": 6.09, "unit_high": 10.44, "low": 42316.8, "mid": 74054.4, "high": 126950.4, "basis": "", "source": "LVP to polished/epoxy, installed", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "ceilings_lighting", "category": "Factory build-out", "name": "Ceilings and light fixtures", "quantity": 12160.0, "unit": "sqft", "unit_low": 2.61, "unit_mid": 4.35, "unit_high": 6.96, "low": 31737.6, "mid": 52895.99999999999, "high": 84633.6, "basis": "", "source": "Shop estimate", "optional": false, "percent_of": null, "active": true, "factor": 0.8699999999999999}, {"id": "glazing_doors", "category": "Factory build-out", "name": "Windows, storefront glazing, doors", "quantity": 38.0, "unit": "ea", "unit_low": 5220.0, "unit_mid": 8700.0, "unit_high": 13920.0, "low": 198360.0, "mid": 330600.0, "high": 528960.0, "basis": "Retail-heavy villages run storefront on one long side plus a door.", "source": "Aluminum storefront systems $60-110/sqft installed", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "exterior_finish", "category": "Factory build-out", "name": "Exterior coating / cladding accents", "quantity": 38.0, "unit": "ea", "unit_low": 1305.0, "unit_mid": 2436.0, "unit_high": 4350.0, "low": 49590.0, "mid": 92568.0, "high": 165300.0, "basis": "", "source": "Industrial coating + wood/metal accents", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "roofing", "category": "Factory build-out", "name": "Roof sealing, overlays, and joins", "quantity": 38.0, "unit": "ea", "unit_low": 696.0, "unit_mid": 1305.0, "unit_high": 2610.0, "low": 26448.0, "mid": 49590.0, "high": 99180.0, "basis": "", "source": "Shop estimate", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "electrical", "category": "MEP", "name": "Electrical rough-in and finish (panel, outlets, lighting circuits)", "quantity": 38.0, "unit": "ea", "unit_low": 3480.0, "unit_mid": 5655.0, "unit_high": 8265.0, "low": 132240.0, "mid": 214890.0, "high": 314070.0, "basis": "", "source": "Electrical sub, per-unit", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "electrical_restaurant_upgrade", "category": "MEP", "name": "Electrical upgrade for restaurant units (3-phase, kitchen loads)", "quantity": 6.0, "unit": "ea", "unit_low": 2610.0, "unit_mid": 4350.0, "unit_high": 6960.0, "low": 15660.0, "mid": 26100.0, "high": 41760.0, "basis": "", "source": "Electrical sub", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "plumbing_retail", "category": "MEP", "name": "Plumbing allowance, retail units", "quantity": 30.0, "unit": "ea", "unit_low": 0.0, "unit_mid": 1305.0, "unit_high": 3480.0, "low": 0.0, "mid": 39150.0, "high": 104400.0, "basis": "", "source": "Most retail uses shared restrooms", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "plumbing_restaurant", "category": "MEP", "name": "Plumbing, restaurant units (sinks, floor drains, water heater)", "quantity": 6.0, "unit": "ea", "unit_low": 6960.0, "unit_mid": 12180.0, "unit_high": 19140.0, "low": 41760.0, "mid": 73080.0, "high": 114840.0, "basis": "", "source": "Plumbing sub", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "plumbing_restroom", "category": "MEP", "name": "Restroom container build-out (ADA fixtures, partitions)", "quantity": 2.0, "unit": "ea", "unit_low": 13050.0, "unit_mid": 21750.0, "unit_high": 34800.0, "low": 26100.0, "mid": 43500.0, "high": 69600.0, "basis": "", "source": "Plumbing sub + fixtures", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "hvac_equipment", "category": "MEP", "name": "HVAC equipment (ductless mini-split / packaged unit)", "quantity": 38.0, "unit": "ea", "unit_low": 2175.0, "unit_mid": 3262.5, "unit_high": 4350.0, "low": 82650.0, "mid": 123975.0, "high": 165300.0, "basis": "Second-biggest volume lever after containers.", "source": "Flextail quotes ($2,500-$5,000/unit)", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "hvac_install", "category": "MEP", "name": "HVAC installation and line sets", "quantity": 38.0, "unit": "ea", "unit_low": 870.0, "unit_mid": 1392.0, "unit_high": 2175.0, "low": 33060.0, "mid": 52896.0, "high": 82650.0, "basis": "", "source": "HVAC sub", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "kitchen_exhaust", "category": "MEP", "name": "Kitchen hood, make-up air, grease duct (restaurants)", "quantity": 6.0, "unit": "ea", "unit_low": 10440.0, "unit_mid": 17400.0, "unit_high": 30450.0, "low": 62640.0, "mid": 104400.0, "high": 182700.0, "basis": "", "source": "Type I hood systems", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "fire_protection", "category": "MEP", "name": "Fire sprinkler and alarm", "quantity": 12160.0, "unit": "sqft", "unit_low": 3.64, "unit_mid": 5.46, "unit_high": 8.19, "low": 44262.4, "mid": 66393.6, "high": 99590.4, "basis": "Assembly/mercantile occupancy typically triggers sprinklers.", "source": "NFPA 13 light-hazard commercial", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "kitchen_equipment", "category": "MEP", "name": "Commercial kitchen equipment package (often tenant-furnished)", "quantity": 6.0, "unit": "ea", "unit_low": 34800.0, "unit_mid": 65250.0, "unit_high": 130500.0, "low": 208800.0, "mid": 391500.0, "high": 783000.0, "basis": "Excluded unless include_kitchen_equipment is true.", "source": "Restaurant equipment dealers", "optional": true, "percent_of": null, "active": false, "factor": 0.87}, {"id": "factory_overhead", "category": "Factory build-out", "name": "Factory handling, jigs, QA, and shop overhead", "quantity": 38.0, "unit": "ea", "unit_low": 1740.0, "unit_mid": 3045.0, "unit_high": 4785.0, "low": 66120.0, "mid": 115710.0, "high": 181830.0, "basis": "Drops with repetition; THO 48-unit run would sit near the low end.", "source": "Flextail assembly-line model", "optional": false, "percent_of": null, "active": true, "factor": 0.87}, {"id": "transport", "category": "Transport & set", "name": "Flatbed transport, factory to site", "quantity": 15200.0, "unit": "container-mile", "unit_low": 3.185, "unit_mid": 4.095, "unit_high": 5.46, "low": 48412.0, "mid": 62243.99999999999, "high": 82992.0, "basis": "Per container per mile. Double-handling (depot to factory to site) is already split out.", "source": "Flatbed/step-deck rates 2025, SE US", "optional": false, "percent_of": null, "active": true, "factor": 0.9099999999999999}, {"id": "transport_permits", "category": "Transport & set", "name": "Transport permits, escorts, tarping", "quantity": 38.0, "unit": "ea", "unit_low": 136.5, "unit_mid": 273.0, "unit_high": 546.0, "low": 5187.0, "mid": 10374.0, "high": 20748.0, "basis": "", "source": "Carrier quotes", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "crane_mob", "category": "Transport & set", "name": "Crane mobilization", "quantity": 1.0, "unit": "ls", "unit_low": 5460.0, "unit_mid": 9100.0, "unit_high": 16380.0, "low": 5460.0, "mid": 9100.0, "high": 16380.0, "basis": "", "source": "Crane rental", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "crane_set", "category": "Transport & set", "name": "Crane and set, per container", "quantity": 38.0, "unit": "ea", "unit_low": 728.0, "unit_mid": 1274.0, "unit_high": 2002.0, "low": 27664.0, "mid": 48412.0, "high": 76076.0, "basis": "Upper-level containers weighted 1.3x.", "source": "Crane rental + rigging crew", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "field_connections", "category": "Transport & set", "name": "Field welding, stitching, flashing between modules", "quantity": 38.0, "unit": "ea", "unit_low": 1092.0, "unit_mid": 1820.0, "unit_high": 3185.0, "low": 41496.0, "mid": 69160.0, "high": 121030.0, "basis": "", "source": "Field crew", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "site_clearing", "category": "Site work", "name": "Clearing, grading, and compaction", "quantity": 22000.0, "unit": "sqft site", "unit_low": 1.365, "unit_mid": 2.275, "unit_high": 3.64, "low": 30030.0, "mid": 50050.0, "high": 80080.0, "basis": "Rock, demolition, or steep grade push this up fast.", "source": "Site contractor, flat urban lot", "optional": false, "percent_of": null, "active": true, "factor": 0.9099999999999999}, {"id": "foundations", "category": "Site work", "name": "Concrete piers / footings", "quantity": 38.0, "unit": "ea ground-level container", "unit_low": 1638.0, "unit_mid": 2730.0, "unit_high": 4095.0, "low": 62244.0, "mid": 103740.0, "high": 155610.0, "basis": "Slab-on-grade alternative runs $8-14/sqft.", "source": "Concrete sub, 6-8 piers per container", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "hardscape", "category": "Site work", "name": "Courtyard pavers and hardscape", "quantity": 9800.0, "unit": "sqft", "unit_low": 10.92, "unit_mid": 16.38, "unit_high": 25.48, "low": 107016.0, "mid": 160524.0, "high": 249704.0, "basis": "", "source": "Concrete pavers installed", "optional": false, "percent_of": null, "active": true, "factor": 0.9099999999999999}, {"id": "parking", "category": "Site work", "name": "Parking and paving", "quantity": 40.0, "unit": "space", "unit_low": 1820.0, "unit_mid": 2912.0, "unit_high": 4550.0, "low": 72800.0, "mid": 116480.0, "high": 182000.0, "basis": "", "source": "Asphalt paving incl. striping, ~300 sqft/space", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "landscaping_lighting", "category": "Site work", "name": "Landscaping and site lighting", "quantity": 22000.0, "unit": "sqft site", "unit_low": 0.91, "unit_mid": 1.82, "unit_high": 3.185, "low": 20020.0, "mid": 40040.0, "high": 70070.0, "basis": "", "source": "Landscape sub", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "stormwater", "category": "Site work", "name": "Stormwater and drainage", "quantity": 22000.0, "unit": "sqft site", "unit_low": 1.82, "unit_mid": 3.185, "unit_high": 5.46, "low": 40040.0, "mid": 70070.0, "high": 120120.0, "basis": "Detention requirements vary by jurisdiction.", "source": "Civil estimate", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "electrical_service", "category": "Utilities", "name": "Electrical service, transformer, switchgear, site distribution", "quantity": 38.0, "unit": "ea", "unit_low": 2275.0, "unit_mid": 3822.0, "unit_high": 5915.0, "low": 86450.0, "mid": 145236.0, "high": 224770.0, "basis": "Expressed per container for scaling; realistic lump for 38 units is $95K-$250K.", "source": "Utility + electrical sub", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "water_sewer", "category": "Utilities", "name": "Water and sewer service (taps, mains, meters)", "quantity": 1.0, "unit": "ls", "unit_low": 54600.0, "unit_mid": 100100.0, "unit_high": 182000.0, "low": 54600.0, "mid": 100100.0, "high": 182000.0, "basis": "", "source": "Civil estimate + tap fees", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "grease_interceptor", "category": "Utilities", "name": "Grease interceptors (restaurants)", "quantity": 6.0, "unit": "ea", "unit_low": 7280.0, "unit_mid": 13650.0, "unit_high": 22750.0, "low": 43680.0, "mid": 81900.0, "high": 136500.0, "basis": "", "source": "Plumbing sub", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "gas_natural", "category": "Utilities", "name": "Natural gas main extension and meters", "quantity": 1.0, "unit": "ls", "unit_low": 31850.0, "unit_mid": 63700.0, "unit_high": 118300.0, "low": 31850.0, "mid": 63700.0, "high": 118300.0, "basis": "See fuel comparison tab for the propane trade-off.", "source": "Gas utility extension quotes", "optional": false, "percent_of": null, "active": true, "factor": 0.91}, {"id": "gas_propane", "category": "Utilities", "name": "Propane tank farm and distribution piping", "quantity": 1.0, "unit": "ls", "unit_low": 18200.0, "unit_mid": 34580.0, "unit_high": 59150.0, "low": 18200.0, "mid": 34580.0, "high": 59150.0, "basis": "Suppliers often subsidize tanks against a supply contract.", "source": "Propane supplier", "optional": false, "percent_of": null, "active": false, "factor": 0.91}, {"id": "design", "category": "Soft costs", "name": "Architecture, engineering, 3D scan", "quantity": 1.0, "unit": "ls", "unit_low": 45000.0, "unit_mid": 60000.0, "unit_high": 120000.0, "low": 45000.0, "mid": 60000.0, "high": 120000.0, "basis": "", "source": "Flextail (AI renderings + 3D scan cut this from $150-200K to ~$50K)", "optional": false, "percent_of": null, "active": true, "factor": 1.0}, {"id": "permits_fees", "category": "Soft costs", "name": "Permits and impact fees", "quantity": 1.0, "unit": "% of hard cost", "unit_low": 0.01, "unit_mid": 0.02, "unit_high": 0.035, "low": 19773.26568, "mid": 65755.22336, "high": 186323.85352000003, "basis": "", "source": "Jurisdiction schedules", "optional": false, "percent_of": "pct_hard", "active": true, "factor": 1.0}, {"id": "general_conditions", "category": "Soft costs", "name": "General conditions (supervision, temp facilities, insurance, bonds)", "quantity": 1.0, "unit": "% of hard cost", "unit_low": 0.08, "unit_mid": 0.1, "unit_high": 0.13, "low": 158186.12544, "mid": 328776.1168, "high": 692060.0273600001, "basis": "", "source": "GC norms", "optional": false, "percent_of": "pct_hard", "active": true, "factor": 1.0}, {"id": "contingency", "category": "Soft costs", "name": "Design and construction contingency", "quantity": 1.0, "unit": "% of hard cost", "unit_low": 0.08, "unit_mid": 0.12, "unit_high": 0.18, "low": 158186.12544, "mid": 394531.34016, "high": 958236.96096, "basis": "Lower as design matures.", "source": "ROM-stage practice", "optional": false, "percent_of": "pct_hard", "active": true, "factor": 1.0}, {"id": "overhead_profit", "category": "Soft costs", "name": "Overhead and profit", "quantity": 1.0, "unit": "% of hard + GC", "unit_low": 0.1, "unit_mid": 0.15, "unit_high": 0.2, "low": 213551.26934400003, "mid": 542480.59272, "high": 1203119.739872, "basis": "This is the margin line. Everything above it is what you need to protect.", "source": "Design-build norms", "optional": false, "percent_of": "pct_hard_gc", "active": true, "factor": 1.0}], "sliders": [{"id": "container_purchase", "label": "Container purchase price", "prefix": "$", "step": 100}, {"id": "hvac_equipment", "label": "HVAC unit price", "prefix": "$", "step": 50}, {"id": "structural_mods", "label": "Structural mods per container", "prefix": "$", "step": 100}, {"id": "glazing_doors", "label": "Glazing and doors per container", "prefix": "$", "step": 250}, {"id": "hardscape", "label": "Courtyard hardscape per sq ft", "prefix": "$", "step": 1}, {"id": "transport", "label": "Transport per container-mile", "prefix": "$", "step": 0.25}, {"id": "contingency", "label": "Contingency", "prefix": "%", "step": 0.5}, {"id": "overhead_profit", "label": "Overhead and profit", "prefix": "%", "step": 0.5}], "swings": [{"id": "glazing_doors", "name": "Windows, storefront glazing, doors", "total_at_low": 4433507.24104, "total_at_high": 4898000.24104, "swing": 464493.0, "share_of_mid_pct": 10.055474929801836}, {"id": "overhead_profit", "name": "Overhead and profit", "total_at_low": 4438477.5768, "total_at_high": 4800131.30528, "swing": 361653.72848000005, "share_of_mid_pct": 7.829181494661923}, {"id": "contingency", "name": "Design and construction contingency", "total_at_low": 4487793.99432, "total_at_high": 4816570.11112, "swing": 328776.11679999996, "share_of_mid_pct": 7.117437722419928}, {"id": "structural_mods", "name": "Structural modifications (cut openings, steel reinforcement, welding)", "total_at_low": 4503181.19104, "total_at_high": 4781876.99104, "swing": 278695.7999999998, "share_of_mid_pct": 6.033284957881097}, {"id": "electrical", "name": "Electrical rough-in and finish (panel, outlets, lighting circuits)", "total_at_low": 4503181.19104, "total_at_high": 4758652.34104, "swing": 255471.15000000037, "share_of_mid_pct": 5.530511211391017}, {"id": "interior_walls", "name": "Interior framing and wall finish", "total_at_low": 4534580.91784, "total_at_high": 4746389.7258399995, "swing": 211808.80799999926, "share_of_mid_pct": 4.585296567989621}, {"id": "hardscape", "name": "Courtyard pavers and hardscape", "total_at_low": 4544125.70104, "total_at_high": 4744602.34104, "swing": 200476.6400000006, "share_of_mid_pct": 4.339974612170503}, {"id": "container_purchase", "name": "Container purchase (one-trip high cube)", "total_at_low": 4554275.42104, "total_at_high": 4749362.48104, "swing": 195087.0599999996, "share_of_mid_pct": 4.223299470516762}, {"id": "electrical_service", "name": "Electrical service, transformer, switchgear, site distribution", "total_at_low": 4536710.11104, "total_at_high": 4731049.7110399995, "swing": 194339.59999999963, "share_of_mid_pct": 4.2071182464917944}, {"id": "general_conditions", "name": "General conditions (supervision, temp facilities, insurance, bonds)", "total_at_low": 4543685.934176, "total_at_high": 4732732.201336, "swing": 189046.26716000028, "share_of_mid_pct": 4.092526690391465}, {"id": "water_sewer", "name": "Water and sewer service (taps, mains, meters)", "total_at_low": 4555376.94104, "total_at_high": 4734373.94104, "swing": 178997.0, "share_of_mid_pct": 3.874977332295081}, {"id": "kitchen_exhaust", "name": "Kitchen hood, make-up air, grease duct (restaurants)", "total_at_low": 4560631.64104, "total_at_high": 4729315.94104, "swing": 168684.2999999998, "share_of_mid_pct": 3.6517251060859257}], "fuel": {"annual_therms": 72000.0, "ng_cost_per_therm": 1.25, "propane_cost_per_therm": 2.622950819672131, "propane_gal_per_year": 78688.52459016393, "ng_annual_opex": 90000.0, "propane_annual_opex": 188852.45901639343, "ng_npv_mid": 702122.338683934, "propane_npv_mid": 1364420.6451072714, "propane_npv_high_price": 1696025.8063840892, "breakeven_propane_price_per_gal": 1.2016501844424616, "recommendation": "Natural gas: the higher upfront extension cost pays back within the hold period and removes propane price risk for tenants.", "notes": ["Energy basis: 1 therm = 100,000 BTU; propane = 91,500 BTU/gal, so 1 therm = 1.093 gal.", "Load assumption: 12,000 therms/yr per restaurant (cooking + water heating). Fast-casual runs 5-8K; full-service 10-20K.", "Propane tanks are often supplied free against a multi-year supply contract; natural gas utilities sometimes credit main extensions against projected revenue. Ask both.", "Propane energizes in weeks; gas main extension can take 3-6 months and gates restaurant opening."]}, "assumptions": ["Cost book 2025.1. Region factors: factory NC 0.87, site GA 0.91.", "Finish level 'standard' (x1.0), glazing 'storefront' (x1.0).", "Kitchen equipment EXCLUDED (assumed tenant-furnished). Toggle include_kitchen_equipment to add.", "Fuel: natural gas. See fuel comparison for the alternative.", "Low / High columns are all-items-at-low / all-items-at-high bounds. P10 / P90 come from 5,000-run Monte Carlo (triangular per line + a shared 0.80/1.00/1.35 ROM-stage scope and market factor) and are the realistic planning band.", "Excludes: land, financing, tenant improvements beyond shell, FF&E, signage/branding, off-site road work, sales tax where applicable.", "38 x 40HC containers at 320 sq ft each = 12,160 sq ft of conditioned floor area.", "Use mix: 6 restaurant, 30 retail/office, 2 restroom, 0 mechanical.", "38 containers on grade, 0 on an upper level.", "Transport: 38 loads x 400 miles (NC factory to Atlanta)."], "baseline": {"p10": 4480393.682267779, "p50": 5217041.215243397, "p90": 6116206.9402959775, "low": 2527023.353904, "mid": 4619304.44104, "high": 8363279.253712}, "generated": "2026-11-05"};
+const $ = s => document.querySelector(s);
+const fmtM = v => "$" + (v/1e6).toFixed(2) + "M";
+const fmtK = v => Math.abs(v) >= 1e6 ? fmtM(v) : "$" + Math.round(v/1e3) + "K";
+const fmt = v => "$" + Math.round(v).toLocaleString();
+const fmtU = (it, v) => it.percent_of ? (v*100).toFixed(1) + "%" : (v < 100 ? "$" + v.toFixed(2) : "$" + Math.round(v).toLocaleString());
+const fmtB = (it, v) => fmtU(it, v / (it.factor || 1)); // show in cost-book (pre-factor) terms
+
+// ---- state ----
+const base = {}; D.items.forEach(it => base[it.id] = {mid: it.unit_mid, active: it.active});
+const state = {mid: {}, active: {}};
+function reset(){ D.items.forEach(it => { state.mid[it.id] = it.unit_mid; state.active[it.id] = it.active; }); }
+reset();
+
+// ---- estimator (mirrors flextail_estimator/estimator.py) ----
+function tri(a, b, c){ // low, high, mode
+  const u = Math.random(), F = (c - a) / (b - a);
+  return u < F ? a + Math.sqrt(u * (b - a) * (c - a)) : b - Math.sqrt((1 - u) * (b - a) * (b - c));
+}
+function compute(){
+  const qty = D.items.filter(i => !i.percent_of && state.active[i.id]);
+  const pct = Object.fromEntries(D.items.filter(i => i.percent_of).map(i => [i.id, i]));
+  const line = {};
+  let hard = {low:0, mid:0, high:0};
+  qty.forEach(i => {
+    const shift = state.mid[i.id] - i.unit_mid; // move low/high with the mid so the range follows the lever
+    const l = Math.max(0, i.unit_low + shift) * i.quantity, m = state.mid[i.id] * i.quantity, h = (i.unit_high + shift) * i.quantity;
+    line[i.id] = {low:l, mid:m, high:h}; hard.low += l; hard.mid += m; hard.high += h;
+  });
+  const gcI = pct.general_conditions;
+  const gc = gcI ? {low: hard.low*gcI.unit_low, mid: hard.mid*state.mid.general_conditions, high: hard.high*gcI.unit_high} : {low:0,mid:0,high:0};
+  if (gcI) line.general_conditions = gc;
+  let total = {low: hard.low+gc.low, mid: hard.mid+gc.mid, high: hard.high+gc.high};
+  Object.values(pct).forEach(p => {
+    if (p.id === "general_conditions") return;
+    const b = p.percent_of === "pct_hard_gc" ? {low:hard.low+gc.low, mid:hard.mid+gc.mid, high:hard.high+gc.high} : hard;
+    line[p.id] = {low: b.low*p.unit_low, mid: b.mid*state.mid[p.id], high: b.high*p.unit_high};
+    total.low += line[p.id].low; total.mid += line[p.id].mid; total.high += line[p.id].high;
+  });
+  // Monte Carlo, 3000 runs
+  const N = 3000, tot = new Array(N);
+  for (let k = 0; k < N; k++){
+    const sys = tri(0.80, 1.35, 1.0);
+    let h = 0;
+    qty.forEach(i => { const shift = state.mid[i.id]-i.unit_mid; const lo = Math.max(0,i.unit_low+shift), hi = i.unit_high+shift, md = state.mid[i.id]; h += (hi > lo ? tri(lo, hi, Math.min(Math.max(md,lo),hi)) : md) * i.quantity; });
+    h *= sys;
+    const g = gcI ? h * tri(gcI.unit_low, gcI.unit_high, state.mid.general_conditions) : 0;
+    let t = h + g;
+    Object.values(pct).forEach(p => { if (p.id === "general_conditions") return; const r = tri(p.unit_low, p.unit_high, state.mid[p.id]); t += (p.percent_of === "pct_hard_gc" ? h+g : h) * r; });
+    tot[k] = t;
+  }
+  tot.sort((a,b)=>a-b);
+  const cats = {};
+  D.items.forEach(i => { if (!line[i.id]) return; const c = cats[i.category] ||= {low:0,mid:0,high:0}; c.low+=line[i.id].low; c.mid+=line[i.id].mid; c.high+=line[i.id].high; });
+  return {line, hard, total, cats, p10: tot[Math.floor(N*.1)], p50: tot[Math.floor(N*.5)], p90: tot[Math.floor(N*.9)]};
+}
+
+// ---- render ----
+const tip = $("#tip");
+function hover(el, text){ el.addEventListener("mousemove", e => { tip.textContent = text; tip.style.left = e.clientX+"px"; tip.style.top = e.clientY+"px"; tip.hidden = false; }); el.addEventListener("mouseleave", () => tip.hidden = true); }
+
+function titleBlock(){
+  const p = D.project, sim = (p.notes||"").toLowerCase().includes("simulated");
+  $("#titleblock").innerHTML = `
+    <div><div class="name">${p.name}</div><div class="sub">${p.location.city ? p.location.city + ", " : ""}${p.location.state} · ${p.client || "ROM estimate"}${sim ? '<span class="sim">simulated takeoff</span>' : ""}</div></div>
+    <div><div class="eyebrow">Containers</div><div class="v">${p.container_count} × ${p.container_type}</div></div>
+    <div><div class="eyebrow">Conditioned</div><div class="v">${Math.round(D.takeoff.building_sqft).toLocaleString()} sq ft</div></div>
+    <div><div class="eyebrow">Site</div><div class="v">${Math.round(p.site_area_sqft).toLocaleString()} sq ft</div></div>
+    <div><div class="eyebrow">Issued</div><div class="v">${D.generated}</div><div class="sub">Rev 0 · ROM</div></div>`;
+}
+
+function rangeBar(r){
+  const lo = D.baseline.low*0.9, hi = D.baseline.high*1.05, W = 760, X = v => 20 + (v-lo)/(hi-lo)*(W-40);
+  const ticks = []; for (let m = Math.ceil(lo/1e6); m*1e6 <= hi; m++) ticks.push(m*1e6);
+  $("#rangebar").innerHTML = `<svg viewBox="0 0 ${W} 64" role="img" aria-label="Planning range">
+    <line x1="20" y1="30" x2="${W-20}" y2="30" stroke="var(--line-strong)"/>
+    ${ticks.map(t=>`<line x1="${X(t)}" y1="26" x2="${X(t)}" y2="34" stroke="var(--line-strong)"/><text x="${X(t)}" y="54" text-anchor="middle" class="muted mono">$${t/1e6}M</text>`).join("")}
+    <rect class="band-rect" x="${X(r.total.low)}" y="24" width="${X(r.total.high)-X(r.total.low)}" height="12" fill="var(--neutral)" opacity=".35" rx="2"/>
+    <rect class="band-rect" x="${X(r.p10)}" y="20" width="${X(r.p90)-X(r.p10)}" height="20" fill="var(--s1)" rx="2"/>
+    <line x1="${X(r.p50)}" y1="14" x2="${X(r.p50)}" y2="46" stroke="var(--ink)" stroke-width="2"/>
+    <text x="${X(r.p50)}" y="10" text-anchor="middle" class="mono">P50 ${fmtM(r.p50)}</text>
+  </svg>`;
+}
+
+function kpis(r){
+  const n = D.project.container_count, sf = D.takeoff.building_sqft;
+  $("#kpis").innerHTML = [
+    ["Median with risk (P50)", fmtM(r.p50)], ["Every line at most likely", fmtM(r.total.mid)],
+    ["Hard cost, mid", fmtM(r.hard.mid)], ["Per conditioned sq ft", fmt(r.total.mid/sf)],
+    ["Per container, all-in", fmt(r.total.mid/n)], ["Bounds, all low to all high", fmtM(r.total.low) + " to " + fmtM(r.total.high)],
+  ].map(([k,v])=>`<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+}
+
+function sliders(){
+  const host = $("#sliders");
+  host.innerHTML = D.sliders.map(s => { const it = D.items.find(i => i.id === s.id); if (!it) return "";
+    const lo = it.percent_of ? it.unit_low*0.5 : it.unit_low*0.7, hi = it.percent_of ? it.unit_high*1.3 : it.unit_high*1.3;
+    const v = state.mid[s.id];
+    return `<div class="slider"><label for="sl_${s.id}">${s.label}</label><div class="val" id="v_${s.id}">${fmtB(it,v)}</div>
+      <input type="range" id="sl_${s.id}" data-id="${s.id}" min="${lo}" max="${hi}" step="${it.percent_of? s.step/100 : s.step*(it.factor||1)}" value="${v}">
+      <div class="rng"><span>${fmtB(it,lo)}</span><span>book: ${fmtB(it,it.unit_low)} / ${fmtB(it,it.unit_mid)} / ${fmtB(it,it.unit_high)}</span><span>${fmtB(it,hi)}</span></div></div>`; }).join("");
+  host.querySelectorAll("input").forEach(inp => inp.addEventListener("input", e => { const id = e.target.dataset.id; state.mid[id] = +e.target.value; $("#v_"+id).textContent = fmtB(D.items.find(i=>i.id===id), state.mid[id]); render(); }));
+  const t = $("#toggles");
+  const kit = D.items.find(i => i.id === "kitchen_equipment");
+  t.innerHTML = (kit ? `<label><input type="checkbox" id="tg_kitchen" ${state.active.kitchen_equipment?"checked":""}> Include kitchen equipment (${fmtK(kit.mid)} mid)</label>` : "") +
+    `<label><input type="radio" name="fuel" value="gas_natural" ${state.active.gas_natural?"checked":""}> Natural gas</label><label><input type="radio" name="fuel" value="gas_propane" ${state.active.gas_propane?"checked":""}> Propane</label>`;
+  if (kit) $("#tg_kitchen").addEventListener("change", e => { state.active.kitchen_equipment = e.target.checked; render(); });
+  t.querySelectorAll('input[name=fuel]').forEach(r => r.addEventListener("change", e => { state.active.gas_natural = e.target.value==="gas_natural"; state.active.gas_propane = e.target.value==="gas_propane"; render(); }));
+  $("#reset").addEventListener("click", () => { reset(); sliders(); render(); });
+}
+
+function catChart(r){
+  const cats = Object.entries(r.cats), max = Math.max(...cats.map(([,c]) => c.high)), W = 560, LW = 150, rowH = 34, H = cats.length*rowH + 30;
+  const X = v => LW + v/max*(W-LW-70);
+  $("#catchart").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cost by category">
+    ${cats.map(([name,c],i) => { const y = i*rowH + 8; return `<g class="row">
+      <text x="${LW-10}" y="${y+15}" text-anchor="end">${name}</text>
+      <line x1="${X(c.low)}" y1="${y+11}" x2="${X(c.high)}" y2="${y+11}" stroke="var(--neutral)" stroke-width="2"/>
+      <line x1="${X(c.low)}" y1="${y+6}" x2="${X(c.low)}" y2="${y+16}" stroke="var(--neutral)" stroke-width="2"/>
+      <line x1="${X(c.high)}" y1="${y+6}" x2="${X(c.high)}" y2="${y+16}" stroke="var(--neutral)" stroke-width="2"/>
+      <rect class="bar" x="${LW}" y="${y}" width="${Math.max(0,X(c.mid)-LW)}" height="22" fill="var(--s1)" rx="2" data-tip="${name}: ${fmtK(c.low)} / ${fmtK(c.mid)} / ${fmtK(c.high)}"/>
+      <text x="${X(c.high)+8}" y="${y+15}" class="mono">${fmtK(c.mid)}</text></g>`; }).join("")}
+    <line x1="${LW}" y1="0" x2="${LW}" y2="${H-20}" stroke="var(--line-strong)"/>
+  </svg>`;
+  $("#catchart").querySelectorAll("[data-tip]").forEach(el => hover(el, el.dataset.tip));
+}
+
+function tornado(){
+  const sw = D.swings, mid = D.baseline.mid, maxd = Math.max(...sw.map(s => Math.max(mid-s.total_at_low, s.total_at_high-mid))), W = 1060, LW = 400, C = LW + (W-LW-90)/2, rowH = 30, H = sw.length*rowH + 40;
+  const X = v => C + (v-mid)/maxd*((W-LW-90)/2);
+  $("#tornado").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tornado sensitivity chart">
+    <line x1="${C}" y1="0" x2="${C}" y2="${H-26}" stroke="var(--ink)" stroke-width="1.5"/>
+    <text x="${C}" y="${H-6}" text-anchor="middle" class="muted mono">every line at most likely: ${fmtM(mid)}</text>
+    ${sw.map((s,i) => { const y = i*rowH + 4, name = s.name.length > 58 ? s.name.slice(0,56)+"…" : s.name; return `<g>
+      <text x="${LW-10}" y="${y+15}" text-anchor="end">${name}</text>
+      <rect x="${X(s.total_at_low)}" y="${y}" width="${C-X(s.total_at_low)}" height="20" fill="var(--s1)" rx="2" data-tip="low: ${fmtM(s.total_at_low)}"/>
+      <rect x="${C+2}" y="${y}" width="${X(s.total_at_high)-C-2}" height="20" fill="var(--s2)" rx="2" data-tip="high: ${fmtM(s.total_at_high)}"/>
+      <text x="${X(s.total_at_high)+8}" y="${y+15}" class="mono">±${fmtK(s.swing/2)}</text></g>`; }).join("")}
+  </svg>`;
+  $("#tornado").querySelectorAll("[data-tip]").forEach(el => hover(el, el.dataset.tip));
+}
+
+function fuelBlock(){
+  const f = D.fuel, rows = [["Natural gas", f.ng_npv_mid, "var(--s1)"], ["Propane", f.propane_npv_mid, "var(--s2)"], ["Propane, +25% price", f.propane_npv_high_price, "var(--s2)"]];
+  const max = Math.max(...rows.map(r=>r[1])), W = 520, LW = 170, rowH = 40, H = rows.length*rowH + 10, X = v => LW + v/max*(W-LW-80);
+  $("#fuelchart").innerHTML = `<div class="eyebrow" style="margin-bottom:8px">10-year cost, capital + fuel, NPV at 7%</div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Fuel NPV comparison">
+    ${rows.map(([n,v,c],i)=>{const y=i*rowH+4;return `<text x="${LW-10}" y="${y+17}" text-anchor="end">${n}</text><rect x="${LW}" y="${y}" width="${X(v)-LW}" height="26" fill="${c}" rx="2" opacity="${i===2?.55:1}" data-tip="${n}: ${fmt(v)}"/><text x="${X(v)+8}" y="${y+17}" class="mono">${fmtM(v)}</text>`;}).join("")}
+  </svg>`;
+  $("#fuelchart").querySelectorAll("[data-tip]").forEach(el => hover(el, el.dataset.tip));
+  $("#fueltext").innerHTML = `<div class="kpis" style="grid-template-columns:repeat(2,1fr)">
+    <div><div class="k">Annual load</div><div class="v">${Math.round(f.annual_therms).toLocaleString()} therms</div></div>
+    <div><div class="k">Propane volume</div><div class="v">${Math.round(f.propane_gal_per_year).toLocaleString()} gal/yr</div></div>
+    <div><div class="k">Gas, $/therm</div><div class="v">$${f.ng_cost_per_therm.toFixed(2)}</div></div>
+    <div><div class="k">Propane, $/therm eq.</div><div class="v">$${f.propane_cost_per_therm.toFixed(2)}</div></div>
+    <div><div class="k">Gas fuel / yr</div><div class="v">${fmtK(f.ng_annual_opex)}</div></div>
+    <div><div class="k">Propane fuel / yr</div><div class="v">${fmtK(f.propane_annual_opex)}</div></div>
+    <div style="grid-column:1/-1"><div class="k">Break-even propane price</div><div class="v">$${f.breakeven_propane_price_per_gal.toFixed(2)} / gal</div></div>
+  </div><div class="rec"><strong>Call:</strong> ${f.recommendation}</div><ul class="notes">${f.notes.map(n=>`<li>${n}</li>`).join("")}</ul>`;
+}
+
+function table(r){
+  let html = `<thead><tr><th>Line item</th><th class="r">Qty</th><th>Unit</th><th class="r">Unit low</th><th class="r">Unit mid</th><th class="r">Unit high</th><th class="r">Low</th><th class="r">Mid</th><th class="r">High</th></tr></thead><tbody>`;
+  let cat = null;
+  D.items.forEach(it => {
+    if (it.category !== cat){ cat = it.category; const c = r.cats[cat]; html += `<tr class="cat"><td colspan="6">${cat}</td><td class="r num">${c?fmt(c.low):""}</td><td class="r num">${c?fmt(c.mid):""}</td><td class="r num">${c?fmt(c.high):""}</td></tr>`; }
+    const l = r.line[it.id], on = !!l, um = it.percent_of ? state.mid[it.id] : state.mid[it.id];
+    html += `<tr class="${on?"":"off"}" title="${(it.source||"").replace(/"/g,"'")}"><td>${it.name}${it.basis?`<div style="color:var(--muted);font-size:12px">${it.basis}</div>`:""}</td><td class="r num">${it.quantity.toLocaleString(undefined,{maximumFractionDigits:1})}</td><td>${it.unit}</td>
+      <td class="r num">${fmtU(it,it.unit_low)}</td><td class="r num">${fmtU(it,um)}</td><td class="r num">${fmtU(it,it.unit_high)}</td>
+      <td class="r num">${on?fmt(l.low):"—"}</td><td class="r num">${on?fmt(l.mid):"—"}</td><td class="r num">${on?fmt(l.high):"—"}</td></tr>`;
+  });
+  html += `<tr class="total"><td colspan="6">Total</td><td class="r num">${fmt(r.total.low)}</td><td class="r num">${fmt(r.total.mid)}</td><td class="r num">${fmt(r.total.high)}</td></tr></tbody>`;
+  $("#items").innerHTML = html;
+}
+
+function render(){
+  const r = compute();
+  $("#headline").innerHTML = `${fmtM(r.p10)}<small>to</small>${fmtM(r.p90)}`;
+  rangeBar(r); kpis(r); catChart(r); table(r);
+}
+titleBlock(); sliders(); tornado(); fuelBlock();
+$("#assumptions").innerHTML = D.assumptions.map(a => `<li>${a}</li>`).join("");
+$("#foot").textContent = `Generated ${D.generated} by flextail-estimator. Rough order of magnitude only; not a bid. Unit costs are editable in data/costbook.json and should be calibrated against actual purchase orders.`;
+render();
+</script>
